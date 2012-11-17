@@ -1,0 +1,8 @@
+name: dart_dirty
+version: 0.0.1
+description: Dirt, simple nosql DB
+author: Chris Strom <chris@eeecomputes.com>
+homepage: https://github.com/eee-c/dart-dirty
+dependencies:
+  unittest:
+    sdk: unittest
