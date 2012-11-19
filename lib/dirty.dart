@@ -36,8 +36,11 @@ class Dirty {
   }
 
   _load() {
+    var exists = db.existsSync();
+
     _writeStream = db.openOutputStream(FileMode.APPEND);
 
+    if (!exists) return;
     var lines = db.readAsLinesSync();
     lines.forEach((line) {
       var rec = JSON.parse(line);

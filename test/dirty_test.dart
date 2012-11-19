@@ -56,7 +56,7 @@ test_read() {
       );
     });
 
-    solo_test("can read a record from the DB stored on the filesystem", () {
+    test("can read a record from the DB stored on the filesystem", () {
       var db = new Dirty('test/test.db');
       db.set('everything', {'answer': 42});
 
