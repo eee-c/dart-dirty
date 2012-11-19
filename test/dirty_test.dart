@@ -41,9 +41,46 @@ test_write() {
   });
 }
 
+test_read() {
+  group("reading", () {
+
+    setUp(removeFixtures);
+    tearDown(removeFixtures);
+
+    test("can read a record from the DB", () {
+      var db = new Dirty('test/test.db');
+      db.set('everything', {'answer': 42});
+      expect(
+        db.get('everything'),
+        equals({'answer': 42})
+      );
+    });
+
+    solo_test("can read a record from the DB stored on the filesystem", () {
+      var db = new Dirty('test/test.db');
+      db.set('everything', {'answer': 42});
+
+      db.close(expectAsync0(() {
+        var db2 = new Dirty(
+          'test/test.db',
+          expectAsync1((db3) {
+            expect(
+              db3.get('everything'),
+              equals({'answer': 42})
+            );
+          })
+        );
+      }));
+
+    });
+
+  });
+}
+
 main() {
   test_create();
   test_write();
+  test_read();
 }
 
 removeFixtures() {

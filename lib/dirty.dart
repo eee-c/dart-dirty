@@ -10,9 +10,9 @@ class Dirty {
   List<String> _keys;
   Queue<String> _queue;
   HashMap<String, dynamic> _docs;
+  var onLoad;
 
-
-  Dirty(path) {
+  Dirty(path, [this.onLoad]) {
     db = new File(path);
     _keys = [];
     _queue = new Queue();
@@ -28,6 +28,8 @@ class Dirty {
     _maybeFlush();
   }
 
+  dynamic get(String key) => _docs[key];
+
   void close([cb]) {
     _writeStream.onClosed = cb;
     _writeStream.close();
@@ -35,6 +37,16 @@ class Dirty {
 
   _load() {
     _writeStream = db.openOutputStream(FileMode.APPEND);
+
+    var lines = db.readAsLinesSync();
+    lines.forEach((line) {
+      var rec = JSON.parse(line);
+      _docs[rec['key']] = rec['val'];
+    });
+
+    if (onLoad != null) {
+      onLoad(this);
+    }
   }
 
   _maybeFlush() {
