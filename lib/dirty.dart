@@ -34,7 +34,6 @@ class Dirty implements HashMap<String, Object> {
   bool containsValue(Object v) => _docs.containsValue(v);
   bool containsKey(String k) => _docs.containsKey(k);
 
-  // Object putIfAbsent(String, () -> Object)
   Object putIfAbsent(String key, cb) {
     var value = _docs.putIfAbsent(key, cb);
     _queue.add(key);
@@ -74,9 +73,7 @@ class Dirty implements HashMap<String, Object> {
       _docs[rec['key']] = rec['val'];
     });
 
-    if (onLoad != null) {
-      onLoad(this);
-    }
+    if (onLoad != null) onLoad();
   }
 
   _maybeFlush() {

@@ -57,20 +57,19 @@ test_read() {
     });
 
     test("can read a record from the DB stored on the filesystem", () {
+      expectStorage() {
+        var db = new Dirty('test/test.db');
+        expect(
+          db['everything'],
+          equals({'answer': 42})
+        );
+      }
+
       var db = new Dirty('test/test.db');
       db['everything'] = {'answer': 42};
-
-      db.close(expectAsync0(() {
-        var db2 = new Dirty(
-          'test/test.db',
-          expectAsync1((db3) {
-            expect(
-              db3['everything'],
-              equals({'answer': 42})
-            );
-          })
-        );
-      }));
+      db.close(expectAsync0(
+        expectStorage
+      ));
 
     });
 
