@@ -1,34 +1,61 @@
-#library('dart_dirty');
+library dart_dirty;
 
-#import('dart:io');
-#import('dart:json');
+import 'dart:io';
+import 'dart:json';
 
-class Dirty {
+class Dirty implements HashMap<String, Object> {
   OutputStream _writeStream;
   File db;
-  boolean flushing = false;
-  List<String> _keys;
+  bool flushing = false;
   Queue<String> _queue;
-  HashMap<String, dynamic> _docs;
+  HashMap<String, Object> _docs;
   var onLoad;
 
   Dirty(path, [this.onLoad]) {
     db = new File(path);
-    _keys = [];
     _queue = new Queue();
     _docs = {};
 
     _load();
   }
 
-  void set(String key, value) {
-    _keys.add(key);
+  void operator []=(String key, Object value) {
     _docs[key] = value;
     _queue.add(key);
     _maybeFlush();
   }
 
-  dynamic get(String key) => _docs[key];
+  Object operator [](String key) => _docs[key];
+
+  int get length => _docs.length;
+  bool get isEmpty => _docs.isEmpty;
+  Collection<String> get keys => _docs.keys;
+  Collection<Object> get values => _docs.values;
+  bool containsValue(Object v) => _docs.containsValue(v);
+  bool containsKey(String k) => _docs.containsKey(k);
+
+  // Object putIfAbsent(String, () -> Object)
+  Object putIfAbsent(String key, cb) {
+    var value = _docs.putIfAbsent(key, cb);
+    _queue.add(key);
+    _maybeFlush();
+    return value;
+  }
+
+  Object remove(String key) {
+    var value = _docs.remove(key);
+    _queue.add(key);
+    _maybeFlush();
+    return value;
+  }
+
+  void clear() {
+    _docs.clear();
+    _writeStream.close();
+    _writeStream = db.openOutputStream(FileMode.WRITE);
+  }
+
+  void forEach(cb) => _docs.forEach(cb);
 
   void close([cb]) {
     _writeStream.onClosed = cb;
