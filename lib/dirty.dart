@@ -89,6 +89,9 @@ class Dirty implements HashMap<String, Object> {
       var saved = _writeStream.writeString("$doc\n");
     });
 
+    _writeStream.flush();
+    _queue.clear();
+
     flushing = false;
   }
 }
