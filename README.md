@@ -32,6 +32,13 @@ To ensure that everything is written to the filesystem, it is best to properly c
 db.close();
 ```
 
+## Performance
+
+I have not really optimized this yet. Using `readAsLines` to read DB records seems less than ideal, but it actually works fairly well. Writing could probably be sped up if data was buffered more, but I focused on read for the first pass.
+
+If you would like to improve, see the `test/mk_perf_db.dart` and `test/perf.dart` scripts. The former creates a 100,000 record DB and the latter reads it back in. On my machine the former takes ~4 minutes to write and ~10 seconds to read. Performance patches welcome!
+
+
 ##License
 
 This software is licensed under the MIT License.
