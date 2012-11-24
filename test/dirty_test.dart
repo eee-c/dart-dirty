@@ -58,11 +58,12 @@ test_read() {
 
     test("can read a record from the DB stored on the filesystem", () {
       expectStorage() {
-        var db = new Dirty('test/test.db');
-        expect(
-          db['everything'],
-          equals({'answer': 42})
-        );
+        var db = new Dirty('test/test.db', onLoad: expectAsync1((db) {
+          expect(
+            db['everything'],
+            equals({'answer': 42})
+          );
+        }));
       }
 
       var db = new Dirty('test/test.db');

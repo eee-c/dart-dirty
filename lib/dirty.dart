@@ -69,13 +69,14 @@ class Dirty implements HashMap<String, Object> {
 
     if (!exists) return;
 
-    var lines = db.readAsLinesSync();
-    lines.forEach((line) {
-      var rec = JSON.parse(line);
-      _docs[rec['key']] = rec['val'];
-    });
+    db.readAsLines().then((lines) {
+      lines.forEach((line) {
+        var rec = JSON.parse(line);
+        _docs[rec['key']] = rec['val'];
+      });
 
-    onLoad(this);
+      onLoad(this);
+    });
   }
 
   _maybeFlush() {
