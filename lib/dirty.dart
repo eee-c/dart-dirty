@@ -11,11 +11,12 @@ class Dirty implements HashMap<String, Object> {
   HashMap<String, Object> _docs;
   var onLoad;
 
-  Dirty(path, [this.onLoad]) {
+  Dirty(path, {this.onLoad}) {
     db = new File(path);
     _queue = new Queue();
     _docs = {};
 
+    if (onLoad == null) onLoad = (_){};
     _load();
   }
 
@@ -67,13 +68,14 @@ class Dirty implements HashMap<String, Object> {
     _writeStream = db.openOutputStream(FileMode.APPEND);
 
     if (!exists) return;
+
     var lines = db.readAsLinesSync();
     lines.forEach((line) {
       var rec = JSON.parse(line);
       _docs[rec['key']] = rec['val'];
     });
 
-    if (onLoad != null) onLoad();
+    onLoad(this);
   }
 
   _maybeFlush() {
