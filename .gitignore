@@ -3,3 +3,4 @@ packages
 test/test.db
 out
 test/perf.db
+docs

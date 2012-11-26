@@ -3,16 +3,32 @@ library dart_dirty;
 import 'dart:io';
 import 'dart:json';
 
+/**
+ * The Dirty class is a quick and dirty way to create a persistent
+ * [HashMap]. In addition to doing all of the usual [HashMap] things, it will
+ * store records in an append-only file database.
+ */
 class Dirty implements HashMap<String, Object> {
   OutputStream _writeStream;
-  File db;
-  bool flushing = false;
+  File _db;
+  bool _flushing = false;
   Queue<String> _queue;
   HashMap<String, Object> _docs;
+
+  /**
+   * The optional callback to be invoked when an existing database has been
+   * completely loaded into memory. If defined, this must be a function that
+   * accepts a single argument (a copy of the [Dirty] instance).
+   */
   var onLoad;
 
+  /**
+   * The database at [path] will be created if it does not already exist. If the
+   * optional [onLoad] parameter is supplied, it will be invoked with a copy fo
+   * the [Dirty] instance.
+   */
   Dirty(path, {this.onLoad}) {
-    db = new File(path);
+    _db = new File(path);
     _queue = new Queue();
     _docs = {};
 
@@ -52,24 +68,29 @@ class Dirty implements HashMap<String, Object> {
   void clear() {
     _docs.clear();
     _writeStream.close();
-    _writeStream = db.openOutputStream(FileMode.WRITE);
+    _writeStream = _db.openOutputStream(FileMode.WRITE);
   }
 
   void forEach(cb) => _docs.forEach(cb);
 
+  /**
+   * Close the database, including the underlying write stream. Once invoked,
+   * no more data will be persisted. If supplied, the callback [cb] will be
+   * invoked with no parameters.
+   */
   void close([cb]) {
     _writeStream.onClosed = cb;
     _writeStream.close();
   }
 
   _load() {
-    var exists = db.existsSync();
+    var exists = _db.existsSync();
 
-    _writeStream = db.openOutputStream(FileMode.APPEND);
+    _writeStream = _db.openOutputStream(FileMode.APPEND);
 
     if (!exists) return;
 
-    db.readAsLines().then((lines) {
+    _db.readAsLines().then((lines) {
       lines.forEach((line) {
         var rec = JSON.parse(line);
         if (rec['val'] == null) {
@@ -85,12 +106,12 @@ class Dirty implements HashMap<String, Object> {
   }
 
   _maybeFlush() {
-    if (flushing) return;
+    if (_flushing) return;
     _flush();
   }
 
   _flush() {
-    flushing = true;
+    _flushing = true;
 
     _queue.forEach((key) {
       String doc = JSON.stringify({'key': key, 'val': _docs[key]});
@@ -100,6 +121,6 @@ class Dirty implements HashMap<String, Object> {
     _writeStream.flush();
     _queue.clear();
 
-    flushing = false;
+    _flushing = false;
   }
 }
