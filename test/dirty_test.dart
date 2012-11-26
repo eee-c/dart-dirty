@@ -107,7 +107,6 @@ test_remove() {
       );
     });
 
-
     test("can remove a record from the filesystem store", () {
       expectKeyIsGone() {
         var db = new Dirty('test/test.db');
@@ -136,6 +135,36 @@ test_remove() {
       addKey();
     });
 
+    solo_test("removes from the list of keys in the filesystem store", () {
+      expectKeyIsGone() {
+        new Dirty('test/test.db', onLoad: expectAsync1((db) {
+          expect(
+            db.keys,
+            equals(['first', 'last'])
+          );
+        }));
+      }
+
+      removeKey() {
+        var db = new Dirty('test/test.db');
+        db.remove('everything');
+        db.close(expectAsync0(
+          expectKeyIsGone
+        ));
+      }
+
+      addKey() {
+        var db = new Dirty('test/test.db');
+        db['first'] = {'answer': 42};
+        db['everything'] = {'answer': 42};
+        db['last'] = {'answer': 42};
+        db.close(expectAsync0(
+          removeKey
+        ));
+      }
+
+      addKey();
+    });
   });
 }
 

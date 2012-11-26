@@ -72,7 +72,12 @@ class Dirty implements HashMap<String, Object> {
     db.readAsLines().then((lines) {
       lines.forEach((line) {
         var rec = JSON.parse(line);
-        _docs[rec['key']] = rec['val'];
+        if (rec['val'] == null) {
+          _docs.remove(rec['key']);
+        }
+        else {
+          _docs[rec['key']] = rec['val'];
+        }
       });
 
       onLoad(this);
