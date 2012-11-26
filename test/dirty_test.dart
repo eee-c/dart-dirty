@@ -135,7 +135,7 @@ test_remove() {
       addKey();
     });
 
-    solo_test("removes from the list of keys in the filesystem store", () {
+    test("removes from the list of keys in the filesystem store", () {
       expectKeyIsGone() {
         new Dirty('test/test.db', onLoad: expectAsync1((db) {
           expect(
