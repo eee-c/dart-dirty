@@ -1,4 +1,4 @@
-library dart_dirty;
+library dirty;
 
 import 'dart:io';
 import 'dart:json';
