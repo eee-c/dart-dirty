@@ -24,7 +24,7 @@ class Dirty implements HashMap<String, Object> {
 
   /**
    * The database at [path] will be created if it does not already exist. If the
-   * optional [onLoad] parameter is supplied, it will be invoked with a copy fo
+   * optional [onLoad] parameter is supplied, it will be invoked with a copy of
    * the [Dirty] instance.
    */
   Dirty(path, {this.onLoad}) {
