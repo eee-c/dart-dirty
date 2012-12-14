@@ -1,5 +1,5 @@
 import 'package:unittest/unittest.dart';
-import 'package:dart_dirty/dirty.dart';
+import 'package:dirty/dirty.dart';
 
 import 'dart:io';
 

@@ -1,8 +1,7 @@
 name: dirty
-version: 0.0.1
+version: 0.0.2
 description: Dart Dirty is a persistent, server-side HashMap - a dirt simple nosql DB.
 author: Chris Strom <chris@eeecomputes.com>
 homepage: https://github.com/eee-c/dart-dirty
 dependencies:
-  unittest:
-    sdk: unittest
+  unittest: any
