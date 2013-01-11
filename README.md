@@ -2,6 +2,9 @@
 
 The dart dirty library is persistent [HashMap](http://api.dartlang.org/docs/bleeding_edge/dart_core/HashMap.html) for Dart.
 
+[![](https://drone.io/eee-c/DartDirty/status.png)](https://drone.io/eee-c/DartDirty/latest)
+
+
 Create a new database with the constructor:
 
 ```dart
