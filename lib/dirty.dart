@@ -1,7 +1,9 @@
 library dirty;
 
 import 'dart:io';
-import 'dart:json';
+import 'dart:async';
+import 'dart:collection';
+import 'dart:json' as JSON;
 
 /**
  * The Dirty class is a quick and dirty way to create a persistent
@@ -9,7 +11,7 @@ import 'dart:json';
  * store records in an append-only file database.
  */
 class Dirty implements HashMap<String, Object> {
-  OutputStream _writeStream;
+  RandomAccessFile _io;
   File _db;
   bool _flushing = false;
   Queue<String> _queue;
@@ -50,6 +52,7 @@ class Dirty implements HashMap<String, Object> {
   Collection<Object> get values => _docs.values;
   bool containsValue(Object v) => _docs.containsValue(v);
   bool containsKey(String k) => _docs.containsKey(k);
+  void addAll(Map<String, Object> m) { _docs.addAll(m); }
 
   Object putIfAbsent(String key, cb) {
     var value = _docs.putIfAbsent(key, cb);
@@ -67,8 +70,8 @@ class Dirty implements HashMap<String, Object> {
 
   void clear() {
     _docs.clear();
-    _writeStream.close();
-    _writeStream = _db.openOutputStream(FileMode.WRITE);
+    _io.close();
+    _io = _db.openSync(FileMode.WRITE);
   }
 
   void forEach(cb) => _docs.forEach(cb);
@@ -79,14 +82,14 @@ class Dirty implements HashMap<String, Object> {
    * invoked with no parameters.
    */
   void close([cb]) {
-    _writeStream.onClosed = cb;
-    _writeStream.close();
+    _io.close().
+      then((_) => cb());
   }
 
   _load() {
     var exists = _db.existsSync();
 
-    _writeStream = _db.openOutputStream(FileMode.APPEND);
+    _io = _db.openSync(FileMode.APPEND);
 
     if (!exists) return;
 
@@ -115,10 +118,10 @@ class Dirty implements HashMap<String, Object> {
 
     _queue.forEach((key) {
       String doc = JSON.stringify({'key': key, 'val': _docs[key]});
-      var saved = _writeStream.writeString("$doc\n");
+      var saved = _io.writeString("$doc\n");
     });
 
-    _writeStream.flush();
+    _io.flush();
     _queue.clear();
 
     _flushing = false;

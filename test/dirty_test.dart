@@ -102,7 +102,7 @@ test_remove() {
       db.remove('everything');
 
       expect(
-        db.keys,
+        db.keys.toList(),
         isEmpty
       );
     });
@@ -138,9 +138,18 @@ test_remove() {
     test("removes from the list of keys in the filesystem store", () {
       expectKeyIsGone() {
         new Dirty('test/test.db', onLoad: expectAsync1((db) {
+          // Why can't I equal a list?!!
           expect(
-            db.keys,
-            equals(['first', 'last'])
+            db.keys.toList().first,
+            equals('first')
+          );
+          expect(
+            db.keys.toList().last,
+            equals('last')
+          );
+          expect(
+            db.keys.toList(),
+            hasLength(2)
           );
         }));
       }
