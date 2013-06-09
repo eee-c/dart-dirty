@@ -48,8 +48,9 @@ class Dirty implements HashMap<String, Object> {
 
   int get length => _docs.length;
   bool get isEmpty => _docs.isEmpty;
-  Collection<String> get keys => _docs.keys;
-  Collection<Object> get values => _docs.values;
+  bool get isNotEmpty => _docs.isNotEmpty;
+  List<String> get keys => _docs.keys;
+  List<Object> get values => _docs.values;
   bool containsValue(Object v) => _docs.containsValue(v);
   bool containsKey(String k) => _docs.containsKey(k);
   void addAll(Map<String, Object> m) { _docs.addAll(m); }
@@ -71,7 +72,7 @@ class Dirty implements HashMap<String, Object> {
   void clear() {
     _docs.clear();
     _io.close();
-    _io = _db.openSync(FileMode.WRITE);
+    _io = _db.openSync(mode: FileMode.WRITE);
   }
 
   void forEach(cb) => _docs.forEach(cb);
@@ -89,7 +90,7 @@ class Dirty implements HashMap<String, Object> {
   _load() {
     var exists = _db.existsSync();
 
-    _io = _db.openSync(FileMode.APPEND);
+    _io = _db.openSync(mode: FileMode.APPEND);
 
     if (!exists) return;
 
