@@ -1,5 +1,5 @@
 import 'package:unittest/unittest.dart';
-import 'package:dart_dirty/dirty.dart';
+import '../lib/dirty.dart';
 
 main() {
   var db = new Dirty('test/perf.db');
