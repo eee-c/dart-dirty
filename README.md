@@ -44,6 +44,7 @@ If you would like to improve, see the `test/mk_perf_db.dart` and `test/perf.dart
 ## Contributors
 
  * [Nicolas R Dufour](https://github.com/nrdufour)
+ * [Ali Ibrahim](https://github.com/alimi)
 
 
 ##License

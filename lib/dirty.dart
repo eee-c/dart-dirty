@@ -79,12 +79,26 @@ class Dirty implements HashMap<String, Object> {
 
   /**
    * Close the database, including the underlying write stream. Once invoked,
-   * no more data will be persisted. If supplied, the callback [cb] will be
-   * invoked with no parameters.
+   * no more data will be persisted.
    */
-  void close([cb]) {
-    _io.close().
-      then((_) => cb());
+  Future<File> close([cb()=_default_cb]) {
+    return _io.close()
+      .then((_) => _db)
+        ..then((_) {
+          if (cb != _default_cb) {
+            try {
+              throw new ArgumentError('DEPRECATED: callbacks no longer supported');
+            }
+            on Error catch (e) {
+              print('''
+DEPRECATED ${e}:
+${e.stackTrace.toString().split("\n").take(3).join("\n")}
+...
+''');
+            }
+          }
+          cb();
+        });
   }
 
   _load() {
@@ -128,3 +142,5 @@ class Dirty implements HashMap<String, Object> {
     _flushing = false;
   }
 }
+
+_default_cb(){}
