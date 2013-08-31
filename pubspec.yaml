@@ -4,5 +4,5 @@ description: Dart Dirty is a persistent, server-side HashMap - a dirt simple nos
 author: Chris Strom <chris@eeecomputes.com>
 homepage: https://github.com/eee-c/dart-dirty
 dependencies:
-  json: any
+  json: ">=0.6.9 <0.6.10"
   unittest: any
