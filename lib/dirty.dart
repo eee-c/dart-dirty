@@ -3,7 +3,7 @@ library dirty;
 import 'dart:io';
 import 'dart:async';
 import 'dart:collection';
-import 'dart:json' as JSON;
+import 'package:json/json.dart' as JSON;
 
 /**
  * The Dirty class is a quick and dirty way to create a persistent
