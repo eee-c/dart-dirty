@@ -36,7 +36,7 @@ test_write() {
         then(expectAsync1((db_file) {
           expect(
             db_file.lengthSync(),
-            greaterThan(0)
+            isNonZero
           );
         }));
 

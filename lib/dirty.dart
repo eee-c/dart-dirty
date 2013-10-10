@@ -138,10 +138,10 @@ ${e.stackTrace.toString().split("\n").take(3).join("\n")}
 
     _queue.forEach((key) {
       String doc = JSON.stringify({'key': key, 'val': _docs[key]});
-      var saved = _io.writeString("$doc\n");
+      _io.writeStringSync("$doc\n");
     });
 
-    _io.flush();
+    _io.flushSync();
     _queue.clear();
 
     _flushing = false;
