@@ -3,7 +3,7 @@ library dirty;
 import 'dart:io';
 import 'dart:async';
 import 'dart:collection';
-import 'package:json/json.dart' as JSON;
+import 'dart:convert';
 
 /**
  * The Dirty class is a quick and dirty way to create a persistent
@@ -115,7 +115,7 @@ ${e.stackTrace.toString().split("\n").take(3).join("\n")}
 
     _db.readAsLines().then((lines) {
       lines.forEach((line) {
-        var rec = JSON.parse(line);
+        var rec = JSON.decode(line);
         if (rec['val'] == null) {
           _docs.remove(rec['key']);
         }
@@ -137,7 +137,7 @@ ${e.stackTrace.toString().split("\n").take(3).join("\n")}
     _flushing = true;
 
     _queue.forEach((key) {
-      String doc = JSON.stringify({'key': key, 'val': _docs[key]});
+      String doc = JSON.encode({'key': key, 'val': _docs[key]});
       _io.writeStringSync("$doc\n");
     });
 
