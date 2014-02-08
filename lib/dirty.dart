@@ -49,8 +49,8 @@ class Dirty implements HashMap<String, Object> {
   int get length => _docs.length;
   bool get isEmpty => _docs.isEmpty;
   bool get isNotEmpty => _docs.isNotEmpty;
-  List<String> get keys => _docs.keys;
-  List<Object> get values => _docs.values;
+  Iterable<String> get keys => _docs.keys;
+  Iterable<Object> get values => _docs.values;
   bool containsValue(Object v) => _docs.containsValue(v);
   bool containsKey(String k) => _docs.containsKey(k);
   void addAll(Map<String, Object> m) { _docs.addAll(m); }
