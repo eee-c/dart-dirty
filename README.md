@@ -1,6 +1,6 @@
 # Dart Dirty
 
-The dart dirty library is persistent [HashMap](http://api.dartlang.org/docs/bleeding_edge/dart_core/HashMap.html) for Dart.
+The dart dirty library is persistent [HashMap](https://api.dartlang.org/stable/dart-collection/HashMap-class.html) for Dart.
 
 [![](https://drone.io/eee-c/DartDirty/status.png)](https://drone.io/eee-c/DartDirty/latest)
 
