@@ -4,3 +4,6 @@ test/test.db
 out
 test/perf.db
 docs
+.idea
+.pub
+.packages
